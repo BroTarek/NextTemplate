@@ -1,26 +1,29 @@
-import Chat from "@/components/Chat";
-import Notifications from "@/components/Notifications";
-
-export default function Home() {
+import React from 'react'
+import Image from 'next/image'
+import testImg from '../public/img.jpg'
+const page = () => {
+  
   return (
-    <main className="min-h-screen bg-black text-white p-8 font-[family-name:var(--font-geist-sans)]">
-      <div className="max-w-6xl mx-auto space-y-8">
-        
-        <header className="text-center space-y-4 py-12">
-          <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-emerald-400">
-            Real-Time Dashboard
-          </h1>
-          <p className="text-neutral-400 text-lg max-w-2xl mx-auto">
-            Demonstrating WebSockets for bi-directional live chat and Server-Sent Events (SSE) for one-way live notifications, managed via <code className="bg-neutral-800 px-2 py-1 rounded text-sm text-blue-300">useSyncExternalStore</code>.
-          </p>
-        </header>
+    <>
+    <div>Local image - path string</div>
+    <Image src='/img.jpg' width={800} height={600} alt='Local Image' className='h-auto w-full max-w-[600px] object-cover' />
+    <div>Local image - path string</div>
+    <Image src={testImg} alt='' placeholder='blur'/>{
+      // no need to initialize the height and width becuse next.js recognizes the dimensions
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <Chat />
-          <Notifications />
-        </div>
-        
-      </div>
-    </main>
-  );
+
+      // <Image src={testImg} width={100} alt=''/> no layout shift happens here even though we did not specify the height
+    }
+
+    {
+    
+    /* <Image src={'https://via.assets.so/game.png?id=1&q=95&w=95&h360'} alt=''  width={100} height={100} fill/>{/**fills the whole space of the parent element
+     */}
+
+
+
+    </>
+  )
 }
+
+export default page
