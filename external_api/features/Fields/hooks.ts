@@ -11,6 +11,8 @@ import { fieldKeys } from "./keys";
 import { safeArray, safeString, safeNumber, safeObject } from "../../utils/utilities";
 import { DetailedValidationError } from '../../errors/DetailedValidationError';
 import { NetworkError, NetworkErrorType } from '../../errors/NetworkError';
+import { toResult, Result } from '../../utils/result';
+import { ErrorWithAction } from '../../utils/getUserFriendlyError';
 
 export type Field = {
     id: number;
@@ -55,7 +57,7 @@ export const useField = (id: string) => {
     });
 };
 
-// 4. Hook for creating a Field
+// 3. Standard Hook for creating a Field (React Query Throwing Pattern)
 export const useCreateField = () => {
     const queryClient = useQueryClient();
 
@@ -63,6 +65,20 @@ export const useCreateField = () => {
         mutationFn: createField,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: fieldKeys.lists() });
+        },
+    });
+};
+
+// 4. Kyle's Result Pattern Hook for inline Form submission (10/10 Type Safe)
+export const useCreateFieldResult = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation<Result<Field, ErrorWithAction>, unknown, Partial<Field>>({
+        mutationFn: (newField) => toResult(createField(newField)),
+        onSuccess: (result) => {
+            if (result.success) {
+                queryClient.invalidateQueries({ queryKey: fieldKeys.lists() });
+            }
         },
     });
 };
